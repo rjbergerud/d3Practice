@@ -53,6 +53,18 @@
 
             <p>This blog post shows a few different types of content that's supported and styled with Bootstrap. Basic typography, images, and code are all supported.</p>
 
+          <section>
+            <p> Blah Blah Blah </p>
+          </section>
+
+          <section>
+            <p> Blah Blah Blah </p>
+          </section>
+
+          <section>
+            <p> Blah Blah Blah </p>
+          </section>
+
           </div><!-- /.blog-post -->
 
 
@@ -78,9 +90,66 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="d3.min.js"> </script>
     <script>
-    d3.selectAll('div').style("color", function() {
-      return "hsl(" + Math.random() * 360 + ",100%,50%)";
+    d3.selectAll('p').style("color", function(d,i) {
+      return "hsl(" + i*Math.random() * 360 + ",100%,50%)";
     });
+
+    d3.select("body")
+      .style("color", "black")
+      .style("background-color", "white");
+
+    d3.selectAll("section")
+        .attr("class", "special")
+      .append("div")
+        .html("Hello, world!")
+
+    var section = d3.selectAll("section");
+
+    section.append("div")
+      .html("First!")
+
+    section.append("div")
+      .html("Second.")
+
+    var data = [2,8,15,23,33];
+
+    d3.select("section")
+      .append("div")
+        .attr("class", "chart")
+        .selectAll("div")
+          .data(data)
+        .enter().append("div")
+          .style("width", function(d) { return d*10 + "px";})
+          .style("background-color", "#e13326")
+          .style("text-align", "right")
+          .style("color", "white")
+          .text(function(d) {return d; });
+
+    var chartSvg = d3.select("section")
+      .append("div")
+        .attr("class", "chart-svg")
+
+    //d3.select(".chart-svg rect")
+    //  .style("fill: steelblue")
+
+    //d3.select(".chart-svg text")
+    //  .style("fill", "white")
+
+    var chart = chartSvg.append("svg")
+        .attr("class", "chart")
+        .attr("width", "420")
+        .attr('height', '120')
+
+    var bar = chart.selectAll("g")
+        .data(data)
+        .enter().append("g")
+        .attr("transform", function(d,i) {return "translate(0," + 20*i + ")";})
+
+
+      bar.append('rect')
+        .attr("width", function(d) {return d*10;})
+        .attr("height", function(d) {return 20;})
+
     </script>
   </body>
 </html>
