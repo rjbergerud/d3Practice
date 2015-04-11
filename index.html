@@ -112,6 +112,9 @@
       .html("Second.")
 
     var data = [2,8,15,23,33];
+    var width = 420,
+        barHeight = 30;
+        textSize = 5;
 
     d3.select("section")
       .append("div")
@@ -134,21 +137,44 @@
 
     //d3.select(".chart-svg text")
     //  .style("fill", "white")
+    var x = d3.scale.linear()
+        .domain([0, d3.max(data)])
+        .range([0, width]);
 
     var chart = chartSvg.append("svg")
         .attr("class", "chart")
-        .attr("width", "420")
-        .attr('height', '120')
+        .attr("width", width)
+        .attr('height', function(d,i) {return data.length*barHeight});
 
-    var bar = chart.selectAll("g")
+    chart.selectAll("g")
         .data(data)
         .enter().append("g")
-        .attr("transform", function(d,i) {return "translate(0," + 20*i + ")";})
+        .attr("transform", function(d,i) {return "translate(0," + barHeight*i + ")";})
+        .append('rect')
+          .attr("width", x)
+          .attr("height", function(d) {return barHeight;})
+          .attr("fill", "steelblue");
+
+      //bar.append('rect')
+        //.attr("width", x)
+        //.attr("height", function(d) {return barHeight;})
+        //.attr("fill", "steelblue");
+      var bar = chart.selectAll("g")
+      bar.append('text')
+        .style("text-anchor", "end")
+        .style("font", "10px sans-serif")
+        .attr("x", function(d) { return x(d) - 3;})
+        .attr("y", function(d) {return barHeight/2 ;}) //this seems relative to the bar
+        .style("fill", "white")
+        .text(function(d) {return d;});
+
+    d3.tsv("data.tsv", function(error, data) {
+      console.log(data[0]);
+      // 3. Code here runs last, after the download finishes.
+
+    });
 
 
-      bar.append('rect')
-        .attr("width", function(d) {return d*10;})
-        .attr("height", function(d) {return 20;})
 
     </script>
   </body>
